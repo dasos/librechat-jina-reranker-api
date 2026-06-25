@@ -1,5 +1,4 @@
 import uvicorn
-from api import app
 import os
 import logging
 
@@ -11,6 +10,10 @@ logging.basicConfig(
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
 )
 
+logger = logging.getLogger(__name__)
+
+from api import app
+
 if __name__ == "__main__":
-    print("::: Jina API :::")
+    logger.info("Starting Jina API on %s:%s", SERVER_HOST, SERVER_PORT)
     uvicorn.run(app, host=SERVER_HOST, port=SERVER_PORT)

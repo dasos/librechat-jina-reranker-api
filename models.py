@@ -13,5 +13,8 @@ class JinaRerankerResponse(BaseModel):
 
 class JinaRerankerRequest(BaseModel):
     query: str
-    documents: List[str]
-    batch_size: int
+    documents: List[Union[str, dict]]
+    model: str | None = None
+    top_n: int | None = None
+    return_documents: bool = True
+    batch_size: int | None = None

@@ -15,6 +15,12 @@ WORKDIR /app
 
 RUN groupadd --system app && useradd --system --gid app --create-home app
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        curl \
+        procps \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt /app/
 RUN pip install --upgrade pip \
     && pip install -r requirements.txt
@@ -26,7 +32,7 @@ RUN mkdir -p "${CACHE_DIR}" \
 USER app
 
 # Pre-download the model into CACHE_DIR during build
-RUN python -c "from fastembed.rerank.cross_encoder import TextCrossEncoder; import os; TextCrossEncoder(model_name=os.getenv('MODEL_NAME'), cache_dir=os.getenv('CACHE_DIR'))"
+#RUN python -c "from fastembed.rerank.cross_encoder import TextCrossEncoder; import os; TextCrossEncoder(model_name=os.getenv('MODEL_NAME'), cache_dir=os.getenv('CACHE_DIR'))"
 
 EXPOSE 8000
 
