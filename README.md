@@ -23,7 +23,7 @@ Environment variables:
 - `SERVER_PORT` (default `8000`): port to listen on.
 - `MODEL_NAME` (default `jinaai/jina-reranker-v2-base-multilingual`): model to load.
 - `CACHE_DIR` (default `/app/.cache` in Docker): cache path for model downloads.
-- `DEFAULT_TOP_K` (optional, default disabled at 0): environment variable to limit maximum results when no top_n is passed by the client. Set value in env var named "TOP_K_MAX". Must be >= total documents returned or set to "all"/"0".
+- `TOP_K_MAX` (optional, default disabled at 0): environment variable to limit maximum results when no top_n is passed by the client.
 
 ## Run locally
 
