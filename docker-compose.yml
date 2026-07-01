@@ -10,6 +10,7 @@ services:
       SERVER_PORT: "8000"
       MODEL_NAME: jinaai/jina-reranker-v2-base-multilingual
       CACHE_DIR: /app/.cache
+      TOP_K_MAX: "100"
     ports:
       - "8000:8000"
     volumes:

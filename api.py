@@ -16,8 +16,12 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 MODEL_NAME = os.getenv("MODEL_NAME", "jinaai/jina-reranker-v2-base-multilingual")
-CACHE_DIR = os.getenv("CACHE_DIR", str(Path(__file__).parent.absolute() / ".cache"))
+CACHE_DIR = os.getenv(
+    "CACHE_DIR", str(Path(__file__).parent.absolute() / ".cache")
+)
 DEFAULT_BATCH_SIZE = int(os.getenv("BATCH_SIZE", "32"))
+DEFAULT_TOP_K = int(os.getenv("TOP_K_MAX", "0"))
+
 RERANK_TIMEOUT_SECONDS = int(os.getenv("RERANK_TIMEOUT_SECONDS", "300"))
 
 app = FastAPI()
@@ -294,8 +298,14 @@ def rerank(request: JinaRerankerRequest = Body(...)):
             key=lambda item: item[1],
             reverse=True,
         )
-        if request.top_n is not None:
-            ranked_results = ranked_results[:request.top_n]
+        
+        effective_top_n = (request.top_n or DEFAULT_TOP_K) if request.documents else 0
+        
+        rank_len = len(ranked_results)
+        limit_idx = min(effective_top_n, rank_len - 1) if rank_len > 0 and effective_top_n >= 0 else None
+
+        if effective_top_n is not None:
+            ranked_results = ranked_results[:effective_top_n]
 
         return {
             "model": MODEL_NAME,
